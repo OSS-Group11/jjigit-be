@@ -1,9 +1,3 @@
----
-name: General Issue
-about: Report a general issue, question, or suggestion for JJiGiT
-labels: discussion
----
-
 <!--
   Use this template for general issues, questions, or suggestions.
   Replace the sections below with your own information.

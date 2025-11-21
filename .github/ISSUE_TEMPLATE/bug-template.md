@@ -1,9 +1,3 @@
----
-name: Bug / Issue
-about: Report a bug or an issue with JJiGiT
-labels: bug
----
-
 <!--
   Please use this template to report a bug or an issue.
 

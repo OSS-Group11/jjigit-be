@@ -1,9 +1,3 @@
----
-name: Pull Request
-about: Submit a pull request for JJiGiT
-labels: 
----
-
 <!--
   Thanks for contributing! Please fill out the sections below.
   Remove instructions and examples before submitting your PR.
