@@ -1,9 +1,3 @@
----
-name: Documentation Issue
-about: Propose updates or additions to documentation for JJiGiT
-labels: documentation
----
-
 <!--
   Use this template for updating, fixing, or adding documentation.
   Replace the sections below with your own information.
