@@ -29,6 +29,7 @@ public class SecurityConfig {
     /**
      * Security filter chain configuration
      * Disables CSRF, enables CORS, and allows all requests (for now)
+     * Explicitly permits Swagger/OpenAPI endpoints
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -38,6 +39,13 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        // Swagger/OpenAPI endpoints
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+                        // Allow all other requests (temporary - will be restricted later)
                         .anyRequest().permitAll()
                 );
 
