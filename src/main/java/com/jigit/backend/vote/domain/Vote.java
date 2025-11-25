@@ -3,6 +3,7 @@ package com.jigit.backend.vote.domain;
 import com.jigit.backend.poll.domain.Option;
 import com.jigit.backend.poll.domain.Poll;
 import com.jigit.backend.user.domain.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,14 +31,17 @@ public class Vote {
     @Column(name = "vote_id")
     private Long voteId;
 
+    @Schema(hidden = true)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "poll_id", nullable = false)
     private Poll poll;
 
+    @Schema(hidden = true)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "option_id", nullable = false)
     private Option option;
 
+    @Schema(hidden = true)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voter_id", nullable = false)
     private User voter;

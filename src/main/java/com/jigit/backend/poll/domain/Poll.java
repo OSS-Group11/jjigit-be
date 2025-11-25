@@ -1,6 +1,7 @@
 package com.jigit.backend.poll.domain;
 
 import com.jigit.backend.user.domain.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -8,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "polls")
@@ -22,6 +21,7 @@ public class Poll {
     @Column(name = "poll_id")
     private Long pollId;
 
+    @Schema(hidden = true)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
@@ -35,18 +35,11 @@ public class Poll {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Option> options = new ArrayList<>();
-
     @Builder
     public Poll(User creator, String title, Boolean isPublic) {
         this.creator = creator;
         this.title = title;
         this.isPublic = isPublic;
         this.createdAt = LocalDateTime.now();
-    }
-
-    public void addOption(Option option) {
-        this.options.add(option);
     }
 }
