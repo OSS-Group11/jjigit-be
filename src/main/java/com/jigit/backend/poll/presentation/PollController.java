@@ -1,13 +1,13 @@
 package com.jigit.backend.poll.presentation;
 
-import com.jigit.backend.global.util.JwtUtil;
+import com.jigit.backend.global.auth.CurrentUser;
 import com.jigit.backend.poll.application.PollService;
 import com.jigit.backend.poll.presentation.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,23 +21,19 @@ import org.springframework.web.bind.annotation.*;
 public class PollController implements PollControllerDocs {
 
     private final PollService pollService;
-    private final JwtUtil jwtUtil;
 
     /**
      * Create a new poll with options
      * @param request poll creation request
-     * @param authorizationHeader JWT token for authentication
+     * @param userId current user's ID (extracted from JWT token via @CurrentUser)
      * @return poll creation response
      */
     @Override
     @PostMapping
     public ResponseEntity<CreatePollResponse> createPoll(
             @Valid @RequestBody CreatePollRequest request,
-            @RequestHeader("Authorization") String authorizationHeader
+            @CurrentUser Long userId
     ) {
-        String token = jwtUtil.extractTokenFromHeader(authorizationHeader);
-        Long userId = jwtUtil.getUserIdFromToken(token);
-
         CreatePollResponse response = pollService.createPoll(request, userId);
         return ResponseEntity.ok(response);
     }
@@ -56,14 +52,26 @@ public class PollController implements PollControllerDocs {
 
     /**
      * Retrieve all public polls with pagination
-     * @param pageable pagination information
+     * @param page page number (0-indexed)
+     * @param size page size
+     * @param sort sort field and direction (e.g., "createdAt,desc")
      * @return paginated list of public polls
      */
     @Override
     @GetMapping
     public ResponseEntity<PollListResponse> getPublicPolls(
-            @PageableDefault(size = 10) Pageable pageable
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort
     ) {
+        // Parse sort parameter (e.g., "createdAt,desc" -> Sort.by(Sort.Order.desc("createdAt")))
+        String[] sortParams = sort.split(",");
+        Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("asc")
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+        Sort sortBy = Sort.by(direction, sortParams[0]);
+
+        Pageable pageable = PageRequest.of(page, size, sortBy);
         PollListResponse response = pollService.getPublicPolls(pageable);
         return ResponseEntity.ok(response);
     }

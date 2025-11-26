@@ -1,5 +1,6 @@
 package com.jigit.backend.poll.presentation;
 
+import com.jigit.backend.global.auth.CurrentUser;
 import com.jigit.backend.global.exception.ErrorResponse;
 import com.jigit.backend.poll.presentation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -122,7 +122,7 @@ public interface PollControllerDocs {
     @PostMapping
     ResponseEntity<CreatePollResponse> createPoll(
             @Valid @RequestBody CreatePollRequest request,
-            @RequestHeader("Authorization") String authorizationHeader
+            @Parameter(hidden = true) @CurrentUser Long userId
     );
 
     @Operation(
@@ -203,7 +203,19 @@ public interface PollControllerDocs {
 
     @Operation(
             summary = "공개 투표 목록 조회",
-            description = "공개로 설정된 투표 목록을 페이지네이션하여 조회합니다."
+            description = """
+                    공개로 설정된 투표 목록을 페이지네이션하여 조회합니다.
+
+                    **Query Parameters:**
+                    - `page`: 페이지 번호 (0부터 시작, 기본값: 0)
+                    - `size`: 페이지당 항목 수 (기본값: 20)
+                    - `sort`: 정렬 기준 (형식: `필드명,방향`, 예: `createdAt,desc`)
+
+                    **사용 예시:**
+                    - `/api/polls?page=0&size=10` - 첫 페이지, 10개씩
+                    - `/api/polls?page=1&size=20&sort=createdAt,desc` - 두 번째 페이지, 최신순 정렬
+                    - `/api/polls?sort=createdAt,asc` - 오래된 순 정렬 (기본 페이지 크기 사용)
+                    """
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "투표 목록 조회 성공",
@@ -287,7 +299,20 @@ public interface PollControllerDocs {
     })
     @GetMapping
     ResponseEntity<PollListResponse> getPublicPolls(
-            @Parameter(description = "페이지네이션 정보 (page, size, sort)")
-            Pageable pageable
+            @Parameter(
+                    description = "페이지 번호 (0부터 시작)",
+                    example = "0",
+                    name = "page"
+            ) @RequestParam(defaultValue = "0") int page,
+            @Parameter(
+                    description = "페이지당 항목 수",
+                    example = "10",
+                    name = "size"
+            ) @RequestParam(defaultValue = "20") int size,
+            @Parameter(
+                    description = "정렬 기준 (예: createdAt,desc 또는 createdAt,asc)",
+                    example = "createdAt,desc",
+                    name = "sort"
+            ) @RequestParam(defaultValue = "createdAt,desc") String sort
     );
 }
