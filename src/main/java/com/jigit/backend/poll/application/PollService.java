@@ -71,7 +71,7 @@ public class PollService {
                         option.getOptionId(),
                         option.getOptionText(),
                         option.getOptionOrder(),
-                        0L // Vote count will be implemented later
+                        option.getVoteCount()
                 ))
                 .collect(Collectors.toList());
 
@@ -105,9 +105,14 @@ public class PollService {
                         option.getOptionId(),
                         option.getOptionText(),
                         option.getOptionOrder(),
-                        0L // Vote count will be implemented later
+                        option.getVoteCount()
                 ))
                 .collect(Collectors.toList());
+
+        // Calculate total votes (sum of all option voteCounts)
+        Integer totalVotes = options.stream()
+                .mapToInt(Option::getVoteCount)
+                .sum();
 
         return new GetPollResponse(
                 poll.getPollId(),
@@ -116,9 +121,10 @@ public class PollService {
                 optionResponses,
                 poll.getCreator().getUserId(),
                 poll.getCreatedAt(),
-                0L // Total votes will be calculated later
+                totalVotes // ← 실제 전체 투표수 반영
         );
     }
+
 
     /**
      * Retrieve all public polls with pagination
@@ -132,14 +138,20 @@ public class PollService {
                 .map(poll -> {
                     List<Option> options = optionRepository.findByPollOrderByOptionOrder(poll);
 
+                    // Build option responses with actual vote counts
                     List<OptionResponse> optionResponses = options.stream()
                             .map(option -> new OptionResponse(
                                     option.getOptionId(),
                                     option.getOptionText(),
                                     option.getOptionOrder(),
-                                    0L // Vote count will be implemented later
+                                    option.getVoteCount() // 실제 투표수 반영
                             ))
                             .collect(Collectors.toList());
+
+                    // Calculate total votes
+                    Integer totalVotes = options.stream()
+                            .mapToInt(Option::getVoteCount)
+                            .sum();
 
                     return new GetPollResponse(
                             poll.getPollId(),
@@ -148,7 +160,7 @@ public class PollService {
                             optionResponses,
                             poll.getCreator().getUserId(),
                             poll.getCreatedAt(),
-                            0L // Total votes will be calculated later
+                            totalVotes // 전체 투표수 반영
                     );
                 })
                 .collect(Collectors.toList());
@@ -161,4 +173,5 @@ public class PollService {
                 pollPage.getSize()
         );
     }
+
 }

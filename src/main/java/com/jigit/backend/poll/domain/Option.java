@@ -29,11 +29,15 @@ public class Option {
     @Column(name = "option_order", nullable = false)
     private Integer optionOrder;
 
+    @Column(name = "vote_count", nullable = false)
+    private Integer voteCount = 0;
+
     @Builder
     public Option(Poll poll, String optionText, Integer optionOrder) {
         this.poll = poll;
         this.optionText = optionText;
         this.optionOrder = optionOrder;
+        this.voteCount = 0;
     }
 
     public void setPoll(Poll poll) {
