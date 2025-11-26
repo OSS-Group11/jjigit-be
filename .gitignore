@@ -11,8 +11,6 @@ SWAGGER.md
 mysql_data/
 .env
 *.env
-application.yaml
-application.yml
 docker-compose.yml
 
 ### IntelliJ IDEA ###
