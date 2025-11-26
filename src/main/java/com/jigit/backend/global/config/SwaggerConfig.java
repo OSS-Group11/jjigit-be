@@ -5,8 +5,12 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 /**
  * Swagger/OpenAPI configuration
@@ -15,9 +19,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
+    @Value("${prod.server.url:http://localhost:8080}")
+    private String prodServerUrl;
+
     /**
      * OpenAPI configuration bean
-     * Defines API metadata and JWT authentication scheme
+     * Defines API metadata, JWT authentication scheme, and server URLs
      */
     @Bean
     public OpenAPI openAPI() {
@@ -37,11 +44,21 @@ public class SwaggerConfig {
                         .bearerFormat("JWT")
                         .description("Enter JWT token"));
 
+        // Server configurations
+        Server localServer = new Server()
+                .url("http://localhost:8080")
+                .description("Local development server");
+
+        Server prodServer = new Server()
+                .url(prodServerUrl)
+                .description("Production server");
+
         return new OpenAPI()
                 .info(new Info()
                         .title("JJiGiT API")
                         .description("JJiGiT Voting Service REST API Documentation")
                         .version("v1.0.0"))
+                .servers(List.of(localServer, prodServer))
                 .addSecurityItem(securityRequirement)
                 .components(components);
     }
