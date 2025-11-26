@@ -45,11 +45,6 @@ public class PollService {
         User creator = userRepository.findById(userId)
                 .orElseThrow(() -> new ApplicationException(UserException.USER_NOT_FOUND));
 
-        // Validate minimum options
-        if (request.getOptions() == null || request.getOptions().size() < 2) {
-            throw new ApplicationException(PollException.INSUFFICIENT_OPTIONS);
-        }
-
         // Create and save poll
         Poll poll = Poll.builder()
                 .creator(creator)
