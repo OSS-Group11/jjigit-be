@@ -22,3 +22,7 @@ spring:
 
   jackson:
     time-zone: Asia/Seoul
+
+prod:
+  server:
+    url: ${PROD_SERVER_URL:http://localhost:8080}
