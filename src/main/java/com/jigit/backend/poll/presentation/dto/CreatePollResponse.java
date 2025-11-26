@@ -32,4 +32,6 @@ public class CreatePollResponse {
 
     @Schema(description = "Poll creation timestamp", example = "2025-11-26T10:30:00")
     private LocalDateTime createdAt;
+
+
 }

@@ -34,5 +34,5 @@ public class GetPollResponse {
     private LocalDateTime createdAt;
 
     @Schema(description = "Total number of votes", example = "150")
-    private Long totalVotes;
+    private Integer totalVotes;
 }

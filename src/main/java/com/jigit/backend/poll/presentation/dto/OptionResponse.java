@@ -22,5 +22,5 @@ public class OptionResponse {
     private Integer optionOrder;
 
     @Schema(description = "Number of votes for this option", example = "42")
-    private Long voteCount;
+    private Integer voteCount;
 }
