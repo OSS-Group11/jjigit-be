@@ -16,7 +16,8 @@ public enum UserException implements ExceptionCode {
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Invalid Credentials", "Username or password is incorrect."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Invalid Token", "The provided token is invalid."),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "Expired Token", "The provided token has expired."),
-    TOKEN_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Token Generation Failed", "Failed to generate authentication token.");
+    TOKEN_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Token Generation Failed", "Failed to generate authentication token."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "Unauthorized", "Authentication is required to access this resource.");
 
     private final HttpStatus httpStatus;
     private final String title;
