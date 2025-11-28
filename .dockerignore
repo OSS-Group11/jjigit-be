@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+.github
+
+# Gradle
+.gradle
+build
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea
+.vscode
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+*.env
+!prod.env
+
+# Documentation
+*.md
+!README.md
+
+# Database
+mysql_data
+
+# Misc
+*.swp
+*.swo
+*~
