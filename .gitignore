@@ -8,6 +8,7 @@ build/
 ### Project-specific ###
 CLAUDE.md
 SWAGGER.md
+.claude/
 mysql_data/
 .env
 *.env
