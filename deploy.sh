@@ -7,6 +7,8 @@ echo "Starting deployment..."
 # Stop and remove existing container
 docker-compose down || true
 
+docker rm -f jjigit-backend 2>/dev/null || true
+
 # Start new container
 docker-compose up -d
 
