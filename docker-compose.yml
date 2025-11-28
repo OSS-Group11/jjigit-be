@@ -15,12 +15,6 @@ services:
       - JWT_EXPIRATION=${JWT_EXPIRATION}
       - PROD_SERVER_URL=${PROD_SERVER_URL}
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 40s
 
   mysql-server:
     image: mysql:8.0
