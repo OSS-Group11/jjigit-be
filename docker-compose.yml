@@ -1,8 +1,6 @@
 services:
   jjigit-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: jjigit-backend:latest
     container_name: jjigit-backend
     ports:
       - "8080:8080"
