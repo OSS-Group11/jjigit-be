@@ -8,7 +8,7 @@ echo "Starting deployment..."
 docker-compose down || true
 
 # Start new container
-docker-compose up -d jjigit-app
+docker-compose up -d
 
 echo "Deployment completed!"
 echo "Application is starting..."
