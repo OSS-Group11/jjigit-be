@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -102,15 +103,28 @@ public class CommentService {
             comments = commentRepository.findByPoll_PollIdOrderByCreatedAtDesc(pollId);
         }
 
-        // 3. Map comments to response DTOs with voter information
+        // 3. Batch fetch all votes for comment authors to prevent N+1 query
+        List<Long> authorIds = comments.stream()
+                .map(comment -> comment.getAuthor().getUserId())
+                .distinct()
+                .collect(Collectors.toList());
+
+        Map<Long, Vote> voteMap = voteRepository.findByPoll_PollIdAndVoter_UserIdIn(pollId, authorIds)
+                .stream()
+                .collect(Collectors.toMap(
+                        vote -> vote.getVoter().getUserId(),
+                        vote -> vote
+                ));
+
+        // 4. Map comments to response DTOs with voter information
         List<CommentResponse> commentResponses = comments.stream()
                 .map(comment -> {
                     Long authorId = comment.getAuthor().getUserId();
                     String authorUsername = comment.getAuthor().getUsername();
 
-                    // Check if comment author voted on this poll
-                    Optional<Vote> vote = voteRepository.findByVoter_UserIdAndPoll_PollId(authorId, pollId);
-                    Long votedOptionId = vote.map(v -> v.getOption().getOptionId()).orElse(null);
+                    // Lookup vote from pre-fetched map
+                    Vote vote = voteMap.get(authorId);
+                    Long votedOptionId = vote != null ? vote.getOption().getOptionId() : null;
 
                     return new CommentResponse(
                             comment.getCommentId(),
