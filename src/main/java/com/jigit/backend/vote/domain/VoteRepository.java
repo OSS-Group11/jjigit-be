@@ -3,6 +3,7 @@ package com.jigit.backend.vote.domain;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,4 +31,14 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
      * @return Optional containing the vote if found, empty otherwise
      */
     Optional<Vote> findByVoter_UserIdAndPoll_PollId(Long userId, Long pollId);
+
+    /**
+     * Batch fetch votes for multiple users on a specific poll.
+     * Used to prevent N+1 queries when retrieving vote information for multiple users.
+     *
+     * @param pollId ID of the poll
+     * @param userIds List of user IDs
+     * @return List of votes matching the criteria
+     */
+    List<Vote> findByPoll_PollIdAndVoter_UserIdIn(Long pollId, List<Long> userIds);
 }

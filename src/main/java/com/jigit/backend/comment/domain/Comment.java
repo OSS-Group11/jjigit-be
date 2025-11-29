@@ -30,12 +30,7 @@ public class Comment {
     @Schema(hidden = true)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voter_id", nullable = false)
-    private User voter;
-
-    @Schema(hidden = true)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment_id")
-    private Comment parentComment;
+    private User author;
 
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
@@ -44,10 +39,9 @@ public class Comment {
     private LocalDateTime createdAt;
 
     @Builder
-    public Comment(Poll poll, User voter, Comment parentComment, String content) {
+    public Comment(Poll poll, User author, String content) {
         this.poll = poll;
-        this.voter = voter;
-        this.parentComment = parentComment;
+        this.author = author;
         this.content = content;
         this.createdAt = LocalDateTime.now();
     }

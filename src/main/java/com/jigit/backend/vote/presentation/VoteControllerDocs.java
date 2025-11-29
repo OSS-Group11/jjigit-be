@@ -7,6 +7,7 @@ import com.jigit.backend.vote.presentation.dto.VoteRequest;
 import com.jigit.backend.vote.presentation.dto.VoteResponse;
 import com.jigit.backend.vote.presentation.dto.VoteStatusResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,9 +50,10 @@ public interface VoteControllerDocs {
             )
     })
     ResponseEntity<VoteResponse> submitVote(
+            @Parameter(description = "투표 ID", example = "1")
             @PathVariable Long pollId,
             @RequestBody VoteRequest request,
-            @CurrentUser Long userId
+            @Parameter(hidden = true) @CurrentUser Long userId
     );
 
     @Operation(
@@ -76,8 +78,9 @@ public interface VoteControllerDocs {
             )
     })
     ResponseEntity<VoteStatusResponse> checkVoteStatus(
+            @Parameter(description = "투표 ID", example = "1")
             @PathVariable Long pollId,
-            @CurrentUser Long userId
+            @Parameter(hidden = true) @CurrentUser Long userId
     );
 
     @Operation(
@@ -97,6 +100,7 @@ public interface VoteControllerDocs {
             )
     })
     ResponseEntity<PollResultsResponse> getPollResults(
+            @Parameter(description = "투표 ID", example = "1")
             @PathVariable Long pollId
     );
 }
