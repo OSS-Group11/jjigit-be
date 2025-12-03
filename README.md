@@ -13,9 +13,16 @@
   </p>
 
   <p>
+    <a href="https://jjigit-be.readthedocs.io/">
+      <img src="https://img.shields.io/badge/Docs-Read%20the%20Docs-blue?style=flat-square&logo=readthedocs" alt="Documentation" />
+    </a>
+  </p>
+
+  <p>
     <a href="#-features">Features</a> •
     <a href="#-quick-start">Quick Start</a> •
     <a href="#-tech-stack">Tech Stack</a> •
+    <a href="#-documentation">Documentation</a> •
     <a href="#-roadmap">Roadmap</a> •
     <a href="#-contributing">Contributing</a> •
     <a href="#-contributors">Contributors</a>
@@ -48,12 +55,30 @@ JJiGiT offers an instant setup, allowing you to create polls in seconds without 
 
 ---
 
+## 🐭 Documentation
+
+Comprehensive documentation is available on Read the Docs:
+
+**📚 [Read the Full Documentation](https://jjigit-be.readthedocs.io/)**
+
+### What's Included
+
+- **Getting Started** - Installation and setup guide
+- **API Reference** - Complete REST API documentation
+- **Configuration** - Configuration options and environment setup
+- **Contributing** - Guidelines for contributors
+- **FAQ** - Frequently asked questions
+
+---
+
 ## 🐭 Quick Start
 
 ### Prerequisites
 - Java 21+
 - MySQL 8.0+
 - Python 3.9+
+
+For detailed setup instructions, see the [Getting Started Guide](https://jjigit-be.readthedocs.io/en/latest/getting-started.html).
 
 ---
 
