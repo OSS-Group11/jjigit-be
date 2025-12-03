@@ -13,7 +13,7 @@
   </p>
 
   <p>
-    <a href="https://jjigit-be.readthedocs.io/">
+    <a href="https://jjigit-be.readthedocs.io/en/latest/">
       <img src="https://img.shields.io/badge/Docs-Read%20the%20Docs-blue?style=flat-square&logo=readthedocs" alt="Documentation" />
     </a>
   </p>
@@ -59,7 +59,7 @@ JJiGiT offers an instant setup, allowing you to create polls in seconds without 
 
 Comprehensive documentation is available on Read the Docs:
 
-**📚 [Read the Full Documentation](https://jjigit-be.readthedocs.io/)**
+**📚 [Read the Full Documentation](https://jjigit-be.readthedocs.io/en/latest/)**
 
 ### What's Included
 
