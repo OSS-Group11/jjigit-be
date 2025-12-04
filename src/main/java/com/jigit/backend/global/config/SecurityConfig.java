@@ -45,7 +45,8 @@ public class SecurityConfig {
                 "http://3.37.253.134:8080",
                 "https://3.37.253.134",
                 "https://jjigit.vercel.app",
-                "https://*.vercel.app"
+                "https://*.vercel.app",
+                "https://*.workers.dev"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
