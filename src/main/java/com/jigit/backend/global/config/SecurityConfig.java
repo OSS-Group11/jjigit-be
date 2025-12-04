@@ -38,13 +38,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:3000",
-                "http://127.0.0.1:3000",
-                "http://localhost:8080",
-                "http://3.37.253.134:8080",
+
+        configuration.setAllowedOriginPatterns(List.of(
+                "http://localhost:*",
+                "http://127.0.0.1:*",
+                "http://3.37.253.134:*",
                 "https://3.37.253.134",
-                "https://jjigit.vercel.app",
                 "https://*.vercel.app",
                 "https://*.workers.dev"
         ));
