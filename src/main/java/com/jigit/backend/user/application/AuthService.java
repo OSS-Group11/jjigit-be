@@ -7,6 +7,7 @@ import com.jigit.backend.user.domain.UserRepository;
 import com.jigit.backend.user.exception.UserException;
 import com.jigit.backend.user.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Service class for authentication operations
  * Handles user signup, login, and token validation
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -32,8 +34,11 @@ public class AuthService {
      */
     @Transactional
     public SignupResponse signup(SignupRequest request) {
+        log.info("Signup attempt - Username: {}", request.getUsername());
+
         // Check for duplicate username
         if (userRepository.existsByUsername(request.getUsername())) {
+            log.warn("Signup failed - Duplicate username: {}", request.getUsername());
             throw new ApplicationException(UserException.DUPLICATE_USERNAME);
         }
 
@@ -48,6 +53,7 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
 
+        log.info("Signup successful - UserId: {}, Username: {}", savedUser.getUserId(), savedUser.getUsername());
         return new SignupResponse(savedUser.getUserId());
     }
 
@@ -58,18 +64,25 @@ public class AuthService {
      * @throws ApplicationException if credentials are invalid
      */
     public LoginResponse login(LoginRequest request) {
+        log.info("Login attempt - Username: {}", request.getUsername());
+
         // Find user by username
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new ApplicationException(UserException.INVALID_CREDENTIALS));
+                .orElseThrow(() -> {
+                    log.warn("Login failed - User not found: {}", request.getUsername());
+                    return new ApplicationException(UserException.INVALID_CREDENTIALS);
+                });
 
         // Verify password
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+            log.warn("Login failed - Invalid password for username: {}", request.getUsername());
             throw new ApplicationException(UserException.INVALID_CREDENTIALS);
         }
 
         // Generate JWT token
         String token = jwtUtil.generateToken(user.getUserId());
 
+        log.info("Login successful - UserId: {}, Username: {}", user.getUserId(), user.getUsername());
         return new LoginResponse(token, user.getUserId());
     }
 

@@ -11,6 +11,7 @@ import com.jigit.backend.user.domain.User;
 import com.jigit.backend.user.domain.UserRepository;
 import com.jigit.backend.user.exception.UserException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
  * Service class for poll operations
  * Handles poll creation, retrieval, and listing
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -41,6 +43,8 @@ public class PollService {
      */
     @Transactional
     public CreatePollResponse createPoll(CreatePollRequest request, Long userId) {
+        log.info("Creating poll - UserId: {}, Title: {}, IsPublic: {}", userId, request.getTitle(), request.getIsPublic());
+
         // Validate user exists
         User creator = userRepository.findById(userId)
                 .orElseThrow(() -> new ApplicationException(UserException.USER_NOT_FOUND));
@@ -75,6 +79,7 @@ public class PollService {
                 ))
                 .collect(Collectors.toList());
 
+        log.info("Poll created successfully - PollId: {}, OptionCount: {}", savedPoll.getPollId(), savedOptions.size());
         return new CreatePollResponse(
                 savedPoll.getPollId(),
                 savedPoll.getTitle(),
@@ -92,6 +97,8 @@ public class PollService {
      * @throws ApplicationException if poll not found
      */
     public GetPollResponse getPollById(Long pollId) {
+        log.debug("Fetching poll - PollId: {}", pollId);
+
         // Find poll
         Poll poll = pollRepository.findById(pollId)
                 .orElseThrow(() -> new ApplicationException(PollException.POLL_NOT_FOUND));
