@@ -17,6 +17,7 @@ import com.jigit.backend.vote.presentation.dto.PollResultsResponse;
 import com.jigit.backend.vote.presentation.dto.VoteResponse;
 import com.jigit.backend.vote.presentation.dto.VoteStatusResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  * Service class for vote-related business logic.
  * Handles vote submission, status checks, and result aggregation.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -51,8 +53,11 @@ public class VoteService {
      */
     @Transactional
     public VoteResponse submitVote(Long userId, Long pollId, Long optionId) {
+        log.info("Vote submission attempt - UserId: {}, PollId: {}, OptionId: {}", userId, pollId, optionId);
+
         // 1. Check if user already voted on this poll
         if (voteRepository.existsByVoter_UserIdAndPoll_PollId(userId, pollId)) {
+            log.warn("Vote failed - User already voted: UserId: {}, PollId: {}", userId, pollId);
             throw new ApplicationException(VoteException.DUPLICATE_VOTE);
         }
 
@@ -66,6 +71,7 @@ public class VoteService {
 
         // 4. Validate option belongs to this poll
         if (!option.getPoll().getPollId().equals(pollId)) {
+            log.warn("Vote failed - Option does not belong to poll: OptionId: {}, PollId: {}", optionId, pollId);
             throw new ApplicationException(VoteException.INVALID_OPTION);
         }
 
@@ -84,6 +90,7 @@ public class VoteService {
         // 7. Atomically increment vote count (thread-safe)
         optionRepository.incrementVoteCount(optionId);
 
+        log.info("Vote submitted successfully - UserId: {}, PollId: {}, OptionId: {}", userId, pollId, optionId);
         return new VoteResponse("Vote submitted successfully");
     }
 

@@ -16,6 +16,7 @@ import com.jigit.backend.user.exception.UserException;
 import com.jigit.backend.vote.domain.Vote;
 import com.jigit.backend.vote.domain.VoteRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  * Service class for comment-related business logic.
  * Handles comment creation and retrieval with voter information.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -49,8 +51,11 @@ public class CommentService {
      */
     @Transactional
     public CreateCommentResponse createComment(Long userId, Long pollId, String content) {
+        log.info("Creating comment - UserId: {}, PollId: {}", userId, pollId);
+
         // 1. Validate content
         if (content == null || content.trim().isEmpty()) {
+            log.warn("Comment creation failed - Invalid content: UserId: {}, PollId: {}", userId, pollId);
             throw new ApplicationException(CommentException.INVALID_COMMENT_CONTENT);
         }
 
@@ -71,6 +76,8 @@ public class CommentService {
 
         Comment savedComment = commentRepository.save(comment);
 
+        log.info("Comment created successfully - CommentId: {}, UserId: {}, PollId: {}",
+                savedComment.getCommentId(), userId, pollId);
         return new CreateCommentResponse(
                 savedComment.getCommentId(),
                 savedComment.getAuthor().getUserId(),
