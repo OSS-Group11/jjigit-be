@@ -33,7 +33,7 @@
 
 ## 🐭 About JJiGiT
 
-JJiGiT is an open-source, real-time polling platform designed to support transparent and smart decision-making. It provides all the tools you need whether you are organizing team votes, conducting surveys, or facilitating structured discussions. The platform is completely free, ad-free, and comes with no usage restrictions.
+JJiGiT is an open-source, real-time polling platform designed to support transparent and smart decision-making. It provides all the tools you need whether you are organizing team votes, conducting surveys, or facilitating structured discussions. The platform is completely free, ad-free, and comes with no usage restrictions.      
 
 JJiGiT offers an instant setup, allowing you to create polls in seconds without any signup. Being open-source, its code and features are fully transparent and community-driven. AI-powered features assist with topic suggestions and summarizing pros and cons, making discussions more insightful. Poll results update in real-time and are presented with clear and interactive charts. The platform also supports structured discussions, helping users organize opinions and make better-informed decisions.
 
